@@ -1,0 +1,149 @@
+@startuml
+!theme sketchy-outline
+
+actor user as user
+
+queue MQ as MQ_A{
+
+}
+
+user -down-> Gateway: Use case(HTTP)
+user -down-> Application_Upstream: Use case(HTTP)
+
+package "Gateway" as Gateway {
+
+}
+
+package "Application A" as Application_A {
+
+    component [Application Context = Spring Context] as Application_Context #81D4FA
+
+    package "Adapt HTTP" as Adapt_HTTP {
+        package "Route" as HTTP_Route {
+            component [/a -> Controller1]
+            component [/b -> Controller2]
+        }
+    }
+
+    package "Adapt not HTTP" as Adapt_NOT_HTTP {
+        package "Route" as NOT_HTTP_Route {
+            component [ObjectA.method -> Controller1]
+            component [ObjectB.method -> Controller2]
+        }
+    }
+
+    Gateway -down-> Adapt_HTTP
+
+    note right of Application_Service
+        对公司外部提供应用服务
+        一般为外网服务，通过http调用
+    end note
+
+    package "Application Service(Stateless)" as Application_Service {
+        component [Service Context = Spring Context] as Service_Context #81D4FA
+
+        interface "Controller1" as Controller1
+        interface "Controller2" as Controller2
+        component [ComponentA(Translate)] as Controller_ComponentA
+
+        note top of Controller_ComponentA
+            聚合内外应用数据（按需）
+            转换应用数据（按需）
+            转换领域服务数据
+            （必需，对外部服务暴露对象（DTO）和用户所需数据对象解耦）
+        end note
+
+        HTTP_Route -down-> Controller1
+        Controller1 -down-> Controller_ComponentA
+        Controller_ComponentA -down-> Application_Downstream
+    }
+
+    note right of Domain_Service
+        对团队外部提供服务
+        一般为内网服务，通过rpc调用
+    end note
+
+    package "Domain Service(Stateless, Transaction or Distributed Transaction)" as Domain_Service {
+        interface "Service_1" as Service_1
+        interface "Service_2"
+        interface "Service_3"
+        component [ComponentA(Translate)] as Service_ComponentA
+
+        note top of Service_ComponentA
+            聚合多个领域数据（按需）
+            转换领域对象到领域服务数据
+            （必须，对外部服务暴露对象（DTO）和领域对象解耦）
+        end note
+
+        Controller1 -down-> Service_1
+        Controller_ComponentA -down-> Service_1
+        Application_upper -down-> Service_1
+        Service_1 -down-> Service_ComponentA
+    }
+
+    package "Domain(Stateful,Transaction)" {
+        component [Domain Context] as Domain_A_Context #81D4FA
+
+        entity "Core A(Entity)" as Core_A
+        entity "enum_A" as enum_A
+        entity "Enum_B" as Enum_B
+        entity "Support A(Entity)" as Support_A
+        entity "Support B(Entity)" as Support_B
+
+        Core_A *-- enum_A
+        Core_A *-- Enum_B
+        Core_A o-- Support_A
+        Core_A o-- Support_B
+
+        Controller1 -[#red]down-> Core_A:<color:red>禁止</color>
+        Service_ComponentA -down-> Core_A
+        Core_A -right-> MQ_A: Send Event
+
+        package "Repository A" {
+            component [Repository Context = Spring Context] as Repository_Context #81D4FA
+
+            interface "Core A" as A_Repository_A
+            entity "core_dao" as core_dao
+            interface "Repository_A" as Support_A_Repository_A
+            entity "dao_A" as dao_A
+
+            note top of core_dao
+                转换领域对象到数据访问对象
+                （必需，领域对象和数据对象解耦）
+            end note
+
+            Core_A -down-> A_Repository_A
+            Support_A -down-> Support_A_Repository_A
+
+            A_Repository_A -down-> core_dao
+            core_dao -down-> "MySql A"
+            Support_A_Repository_A -down-> dao_A
+            dao_A -down-> "MySql A"
+        }
+    }
+
+    package "Domain(Stateful,Transaction)" as Domain_B {
+        component [Domain Context] as Domain_B_Context #81D4FA
+
+        entity "Core B" as Core_B
+
+        Service_ComponentA -down-> Core_B
+    }
+}
+
+package "Application Upstream" as Application_Upstream {
+
+}
+
+Application_Upstream -[#red]right-> Gateway:<color:red>禁止</color>
+MQ_A .left.> Application_Upstream: Notify
+
+package "Application Downstream" as Application_Downstream {
+
+}
+
+database "MySql A" {
+
+}
+
+@enduml

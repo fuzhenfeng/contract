@@ -1,0 +1,6 @@
+rootProject.name = 'contract'
+include 'application'
+include 'domain'
+include 'repository'
+include 'common'
+
