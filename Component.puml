@@ -14,6 +14,14 @@ package "Gateway" as Gateway {
 
 }
 
+package "Application Downstream" as Application_Downstream {
+
+}
+
+database "MySql" as MySql_A {
+
+}
+
 package "Application A" as Application_A {
 
     component [Application Context = Spring Context] as Application_Context #81D4FA
@@ -116,9 +124,9 @@ package "Application A" as Application_A {
             Support_A -down-> Support_A_Repository_A
 
             A_Repository_A -down-> core_dao
-            core_dao -down-> "MySql A"
+            core_dao -down-> MySql_A
             Support_A_Repository_A -down-> dao_A
-            dao_A -down-> "MySql A"
+            dao_A -down-> MySql_A
         }
     }
 
@@ -137,13 +145,5 @@ package "Application Upstream" as Application_Upstream {
 
 Application_Upstream -[#red]right-> Gateway:<color:red>禁止</color>
 MQ_A .left.> Application_Upstream: Notify
-
-package "Application Downstream" as Application_Downstream {
-
-}
-
-database "MySql A" {
-
-}
 
 @enduml
