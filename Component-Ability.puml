@@ -1,0 +1,104 @@
+@startuml
+!theme sketchy-outline
+
+skinparam node {
+    FontColor #black
+}
+
+package "Infrastructure" as Application_A {
+    interface Servlet
+    component [Adapt] as Adapt_Servlet #81D4FA
+
+    interface Jms
+    component [Adapt] as Adapt_Jms #81D4FA
+
+    Adapt_Jms -|> Jms
+    Adapt_Servlet -|> Servlet
+
+    node "Controller" {
+      interface Service as Facade_Service #81D4FA
+
+      interface Cache as Facade_Cache #81D4FA
+      interface RPC as Facade_RPC #81D4FA
+    }
+
+    node "Domain" {
+      interface Service as Service
+      [Service Impl] -|> Service
+
+      interface Jpa as Domain_Jpa
+
+      interface Cache as Aggregation_Cache #81D4FA
+      interface RPC as Aggregation_RPC #81D4FA
+
+      interface "Domain Event" as Domain_Event #81D4FA
+      interface "Domain Life Cycle" as Domain_Life_Cycle #81D4FA
+      interface "Domain State Log" as Domain_State_Log #81D4FA
+    }
+    Domain_Event ..> Domain_Life_Cycle
+    Domain_Life_Cycle ..> Domain_State_Log
+
+    node "Repository" {
+      interface Jpa as Jpa
+      [Jpa Impl] -|> Jpa
+
+      interface Jdbc as Jdbc
+      [MySql Jdbc] -|> Jdbc
+    }
+
+    component [Cache] as Adapt_Cache #81D4FA
+
+    component [RPC] as RPC_Impl #81D4FA
+
+    component [Config] as Config #81D4FA
+
+    component [Task] as Task #81D4FA
+
+    component IOC as IOC  #81D4FA
+}
+
+package "plan" as plan {
+    actor "customer?data?" as customer
+    actor "product manager" as manager
+    actor "programmer" as programmer
+    component "record:Mail?" as plan_record  #81D4FA
+}
+customer .. manager: chat
+customer .. programmer: chat
+manager .. programmer: chat
+
+package "work" as work {
+    package "group1" as group1 {
+        actor "programmer1 domainA" as work1
+        actor "programmer2 domainA" as work2
+    }
+
+    package "group1" as group2 {
+        actor "programmer3 domainB" as work3
+        actor "programmer4 domainB" as work4
+    }
+}
+plan --> work: 1.
+
+package "risk" as risk {
+    component record as risk_record  #81D4FA
+    component step as risk_step  #81D4FA
+}
+plan ...> risk
+
+work .. Application_A
+Application_A ...> risk
+
+package "evaluate" as evaluate {
+    actor "customer?data?" as customer_assessment
+    actor "product manager" as manager_assessment
+    actor "programmer" as programmer_assessment
+}
+work --> evaluate: 2.
+evaluate ...> risk
+
+folder next {
+}
+evaluate ---> next: 3. version: 1.0.0
+
+@enduml

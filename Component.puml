@@ -22,21 +22,20 @@ database "MySql" as MySql_A {
 
 }
 
+database "MySql" as MySql_B {
+
+}
+
 package "Application A" as Application_A {
-
-    component [Application Context = Spring Context] as Application_Context #81D4FA
-
     package "Adapt HTTP" as Adapt_HTTP {
         package "Route" as HTTP_Route {
             component [/a -> Controller1]
-            component [/b -> Controller2]
         }
     }
 
     package "Adapt not HTTP" as Adapt_NOT_HTTP {
         package "Route" as NOT_HTTP_Route {
             component [ObjectA.method -> Controller1]
-            component [ObjectB.method -> Controller2]
         }
     }
 
@@ -48,17 +47,14 @@ package "Application A" as Application_A {
     end note
 
     package "Application Service(Stateless)" as Application_Service {
-        component [Service Context = Spring Context] as Service_Context #81D4FA
-
         interface "Controller1" as Controller1
         interface "Controller2" as Controller2
         component [ComponentA(Translate)] as Controller_ComponentA
 
         note top of Controller_ComponentA
             聚合内外应用数据（按需）
-            转换应用数据（按需）
             转换领域服务数据
-            （必需，对外部服务暴露对象（DTO）和用户所需数据对象解耦）
+            （必须，对外部服务暴露对象（DTO）和用户所需数据对象解耦）
         end note
 
         HTTP_Route -down-> Controller1
@@ -85,13 +81,11 @@ package "Application A" as Application_A {
 
         Controller1 -down-> Service_1
         Controller_ComponentA -down-> Service_1
-        Application_upper -down-> Service_1
+        Application_Upstream -down-> Service_1
         Service_1 -down-> Service_ComponentA
     }
 
-    package "Domain(Stateful,Transaction)" {
-        component [Domain Context] as Domain_A_Context #81D4FA
-
+    package "Domain(Stateful,Transaction?)" {
         entity "Core A(Entity)" as Core_A
         entity "enum_A" as enum_A
         entity "Enum_B" as Enum_B
@@ -108,8 +102,6 @@ package "Application A" as Application_A {
         Core_A -right-> MQ_A: Send Event
 
         package "Repository A" {
-            component [Repository Context = Spring Context] as Repository_Context #81D4FA
-
             interface "Core A" as A_Repository_A
             entity "core_dao" as core_dao
             interface "Repository_A" as Support_A_Repository_A
@@ -130,13 +122,14 @@ package "Application A" as Application_A {
         }
     }
 
-    package "Domain(Stateful,Transaction)" as Domain_B {
-        component [Domain Context] as Domain_B_Context #81D4FA
-
+    package "Domain(Stateful,Transaction?)" as Domain_B {
         entity "Core B" as Core_B
 
         Service_ComponentA -down-> Core_B
     }
+
+    Core_A -[#red]-> Core_B:<color:red>禁止</color>
+    Core_B ..> MySql_B: 省略
 }
 
 package "Application Upstream" as Application_Upstream {

@@ -1,3 +1,22 @@
+allprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+}
+subprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    publishing {
+        publications {
+            myPublish(MavenPublication) {
+                from components.java
+            }
+        }
+        repositories {
+            mavenLocal()
+        }
+    }
+}
 group 'org.contract'
 version '1.0-SNAPSHOT'
-
