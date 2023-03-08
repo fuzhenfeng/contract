@@ -63,7 +63,7 @@ com.xxx.service.service.entity
 * cache api(guava)
 * security api()
 * test api(junit)
-* doc api(spring rest docs)
+* doc api(java docs)
 * config api(zookeeper)
 
 ### 推荐

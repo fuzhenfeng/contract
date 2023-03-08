@@ -1,5 +1,9 @@
 package org.contract.config;
 
+/**
+ * 应用必要配置信息
+ * @author fuzhenfeng
+ */
 public class AppConfig {
     private String appId;
     private String appName;

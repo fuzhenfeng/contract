@@ -1,0 +1,21 @@
+@startuml
+!theme sketchy-outline
+
+
+package "Server" {
+  interface Dispatch
+}
+
+package "Controller or Service" {
+  component "Dispatch Impl" as Dispatch_Impl
+  component "Route" as Route
+  component "..." as ...
+}
+
+Dispatch_Impl -|> Dispatch
+
+Server .> Dispatch_Impl: request
+Dispatch_Impl .down.> Route: request
+Route .down.> ...: request
+
+@enduml
