@@ -1,6 +1,6 @@
 package org.contract.domain;
 
-import org.contract.common.Layer;
+import org.contract.common.NameSpace;
 import org.contract.server.Dispatch;
 import org.contract.server.HttpReq;
 import org.contract.server.HttpResp;
@@ -14,6 +14,6 @@ public class ServiceDispatch implements Dispatch {
 
     @Override
     public HttpResp happyCall(HttpReq httpReq) {
-        return route.request(httpReq, Layer.SERVICE.name());
+        return route.request(httpReq, NameSpace.SERVICE.name());
     }
 }

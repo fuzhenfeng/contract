@@ -102,7 +102,7 @@ public class Heap<E> {
         return ret;
     }
 
-    public void swap(int i, int j){
+    private void swap(int i, int j){
         if(i < 0 || i >= data.size() || j < 0 || j >= data.size())
             throw new IllegalArgumentException();
         E t = data.get(i);

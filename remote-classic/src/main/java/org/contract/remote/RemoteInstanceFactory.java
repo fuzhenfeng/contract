@@ -2,15 +2,15 @@ package org.contract.remote;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
-import org.contract.common.Layer;
+import org.contract.common.NameSpace;
 
 public class RemoteInstanceFactory<T> implements RemoteFactory<T> {
 
-    private Layer layer;
+    private NameSpace nameSpace;
     private Class<T> aClass;
 
-    public RemoteInstanceFactory(Layer layer, Class<T> aClass) {
-        this.layer = layer;
+    public RemoteInstanceFactory(NameSpace nameSpace, Class<T> aClass) {
+        this.nameSpace = nameSpace;
         this.aClass = aClass;
     }
 
@@ -19,7 +19,7 @@ public class RemoteInstanceFactory<T> implements RemoteFactory<T> {
         try {
             ProxyFactory factory = new ProxyFactory();
             factory.setInterfaces(new Class[]{aClass});
-            factory.setHandler(getHandle(layer));
+            factory.setHandler(getHandle(nameSpace));
 
             Class<?> c = factory.createClass();
             T t = (T) c.newInstance();
@@ -31,7 +31,7 @@ public class RemoteInstanceFactory<T> implements RemoteFactory<T> {
         }
     }
 
-    private MethodHandler getHandle(Layer layer) {
+    private MethodHandler getHandle(NameSpace nameSpace) {
         return new RemoteMethodHandler(aClass);
     }
 }

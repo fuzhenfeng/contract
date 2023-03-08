@@ -16,15 +16,15 @@ public interface Route {
     /**
      * 路由器初始化
      * @param ioc
-     * @param layer
+     * @param namespace
      */
-    void init(Ioc ioc, String layer);
+    void init(Ioc ioc, String namespace);
 
     /**
      * 根据请求进行路由
      * @param httpReq
-     * @param layer
+     * @param namespace
      * @return
      */
-    HttpResp request(HttpReq httpReq, String layer);
+    HttpResp request(HttpReq httpReq, String namespace);
 }

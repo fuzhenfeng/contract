@@ -3,7 +3,7 @@ package org.contract.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.contract.common.InitException;
-import org.contract.common.Layer;
+import org.contract.common.NameSpace;
 import org.contract.common.StringUtils;
 import org.contract.config.AppConfig;
 import org.contract.config.Environment;
@@ -52,17 +52,17 @@ public class HttpController implements Controller {
 
     private void register() throws InitException {
         String path = getPath();
-        ioc.registerByDirectory(Layer.CONTROLLER.name(), path + StringUtils.LINUX_SEPARATOR + "controller");
+        ioc.registerByDirectory(NameSpace.CONTROLLER.name(), path + StringUtils.LINUX_SEPARATOR + "controller");
     }
 
     private void buildRoute() {
         Route route = new HttpRoute();
-        route.init(ioc, Layer.CONTROLLER.name());
+        route.init(ioc, NameSpace.CONTROLLER.name());
         this.route = route;
     }
 
     private String getPath() {
         URL resource = environment.getClassLoader().getResource(StringUtils.EMPTY);
-        return resource.getPath() + appConfig.getAppRealmName().replace(StringUtils.REALM_SEPARATOR, StringUtils.LINUX_SEPARATOR);
+        return resource.getPath() + appConfig.getAppRealmName2();
     }
 }

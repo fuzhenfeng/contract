@@ -41,7 +41,7 @@ public class Boot {
             }
         }));
 
-        int loadTime = (int) (System.currentTimeMillis() -t1);
+        int loadTime = (int) (System.currentTimeMillis() - t1);
         log.info("load success, spend " + loadTime + " .");
     }
 }

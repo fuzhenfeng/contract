@@ -3,7 +3,7 @@ package org.contract.remote;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.contract.common.InitException;
-import org.contract.common.Layer;
+import org.contract.common.NameSpace;
 import org.contract.common.StringUtils;
 import org.contract.config.AppConfig;
 import org.contract.config.Config;
@@ -39,25 +39,25 @@ public class HttpRemote implements Remote {
             String path = getPath(appConfig.getAppRealmName() + StringUtils.LINUX_SEPARATOR +
                     appConfig.getControllerName() + StringUtils.LINUX_SEPARATOR +
                     appConfig.getControllerRpcName());
-            registerIoc(Layer.CONTROLLER, path);
+            registerIoc(NameSpace.CONTROLLER, path);
         }
 
         if(StringUtils.isNotBlank(appConfig.getServiceRpcName())) {
             String path = getPath(appConfig.getAppRealmName() + StringUtils.LINUX_SEPARATOR +
                     appConfig.getServiceDomainName() + StringUtils.LINUX_SEPARATOR +
                     appConfig.getServiceRpcName());
-            registerIoc(Layer.SERVICE, path);
+            registerIoc(NameSpace.SERVICE, path);
         }
     }
 
-    private void registerIoc(Layer layer, String path) throws InitException {
+    private void registerIoc(NameSpace nameSpace, String path) throws InitException {
         List<Class> classes = getClasses(path);
         Iterator<Class> iterator = classes.iterator();
         while (iterator.hasNext()) {
             Class next = iterator.next();
-            RemoteFactory remoteFactory = new RemoteInstanceFactory(layer, next);
+            RemoteFactory remoteFactory = new RemoteInstanceFactory(nameSpace, next);
             RemoteInstance remoteInstance = new RemoteInstance(remoteFactory.getInstance());
-            ioc.register(layer.name(), remoteInstance, next.getName());
+            ioc.register(nameSpace.name(), remoteInstance, next.getName());
         }
         // todo 不考虑接口属性
     }

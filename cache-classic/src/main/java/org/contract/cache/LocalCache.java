@@ -1,7 +1,5 @@
 package org.contract.cache;
 
-import org.contract.common.StringUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +17,16 @@ public class LocalCache implements Cache {
         tail = new Node();
         head.next = tail;
         tail.prev = head;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public int capacity() {
+        return capacity;
     }
 
     @Override
@@ -48,7 +56,7 @@ public class LocalCache implements Cache {
     public String get(String key) {
         Node node = map.get(key);
         if (node == null) {
-            return StringUtils.EMPTY;
+            return null;
         } else {
             moveToHead(node);
             return node.value;

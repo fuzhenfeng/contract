@@ -32,7 +32,7 @@ public class LocalIoc implements Ioc {
     }
 
     @Override
-    public void registerByDirectory(String layer, String path) throws InitException {
+    public void registerByDirectory(String namespace, String path) throws InitException {
         File file = new File(path);
         Iterator<File> files = Arrays.stream(file.listFiles()).iterator();
         ClassLoader classLoader = environment.getClassLoader();
@@ -44,10 +44,10 @@ public class LocalIoc implements Ioc {
                 String className = getClassName(next.getPath(), classLoader);
                 InstanceDefinition<? extends InstanceDefinition> instanceDefinition = getInstanceDefinition(classLoader, className);
 
-                doRegister(layer, instanceDefinition);
+                doRegister(namespace, instanceDefinition);
             }
 
-            applyPropertyValues(layer, classLoader);
+            applyPropertyValues(namespace, classLoader);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new InitException("register ioc error");
@@ -55,54 +55,54 @@ public class LocalIoc implements Ioc {
     }
 
     @Override
-    public <T> void register(String layer, InstanceDefinition<T> instanceDefinition, String name) throws InitException {
-        doRegister(layer, instanceDefinition, name);
+    public <T> void register(String namespace, InstanceDefinition<T> instanceDefinition, String name) throws InitException {
+        doRegister(namespace, instanceDefinition, name);
     }
 
     @Override
-    public List<Class> getClasses(String layer) {
-        List<Class> collect = getClassCache(layer).entrySet().stream().map(entity -> entity.getValue()).collect(Collectors.toList());
+    public List<Class> getClasses(String namespace) {
+        List<Class> collect = getClassCache(namespace).entrySet().stream().map(entity -> entity.getValue()).collect(Collectors.toList());
         return ImmutableUtils.list(collect);
     }
 
     @Override
-    public List<Object> getInstances(String layer) {
-        List<Object> collect = getInstantCache(layer).entrySet().stream().map(entity -> entity.getValue()).collect(Collectors.toList());
+    public List<Object> getInstances(String namespace) {
+        List<Object> collect = getInstantCache(namespace).entrySet().stream().map(entity -> entity.getValue()).collect(Collectors.toList());
         return ImmutableUtils.list(collect);
     }
 
-    private void applyPropertyValues(String layer, ClassLoader classLoader) throws IllegalAccessException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException {
-        Queue<Map.Entry<String, Object>> queue = copyInstant(layer);
+    private void applyPropertyValues(String namespace, ClassLoader classLoader) throws IllegalAccessException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException {
+        Queue<Map.Entry<String, Object>> queue = copyInstant(namespace);
 
         while (!queue.isEmpty()) {
             Map.Entry<String, Object> next = queue.poll();
 
             String key = next.getKey();
             Object value = next.getValue();
-            Class aClass = getClassCache(layer).get(key);
+            Class aClass = getClassCache(namespace).get(key);
 
             for (Field field: aClass.getDeclaredFields()) {
                 String typeName = field.getGenericType().getTypeName();
                 if(filterByClassName(typeName))
                     continue;
-                Object fieldInstant = getInstantCache(layer).get(typeName);
+                Object fieldInstant = getInstantCache(namespace).get(typeName);
                 if(fieldInstant == null) {
                     InstanceDefinition instanceDefinition = getInstanceDefinition(classLoader, typeName);
                     if(instanceDefinition == null)
                         continue;
-                    doRegister(layer, instanceDefinition);
+                    doRegister(namespace, instanceDefinition);
 
                     queue.offer(buildEntity(instanceDefinition));
                 }
 
                 field.setAccessible(true);
-                field.set(value, getInstantCache(layer).get(typeName));
+                field.set(value, getInstantCache(namespace).get(typeName));
             }
         }
     }
 
-    private Queue<Map.Entry<String, Object>> copyInstant(String layer) {
-        Iterator<Map.Entry<String, Object>> instances = getInstantCache(layer).entrySet().iterator();
+    private Queue<Map.Entry<String, Object>> copyInstant(String namespace) {
+        Iterator<Map.Entry<String, Object>> instances = getInstantCache(namespace).entrySet().iterator();
         Queue<Map.Entry<String, Object>> queue = new LinkedList<>();
         while (instances.hasNext()) {
             queue.add(instances.next());
@@ -116,36 +116,36 @@ public class LocalIoc implements Ioc {
         return newEntity.entrySet().iterator().next();
     }
 
-    private Map<String, Class<? extends InstanceDefinition>> getClassCache(String layer) {
-        return classes.get(layer);
+    private Map<String, Class<? extends InstanceDefinition>> getClassCache(String namespace) {
+        return classes.get(namespace);
     }
 
-    private Map<String, Object> getInstantCache(String layer) {
-        return singletonObjects.get(layer);
+    private Map<String, Object> getInstantCache(String namespace) {
+        return singletonObjects.get(namespace);
     }
 
-    private void doRegister(String layer, InstanceDefinition instanceDefinition, String name) {
+    private void doRegister(String namespace, InstanceDefinition instanceDefinition, String name) {
         Object definition = instanceDefinition.getDefinition();
         Class aClass = definition.getClass();
-        cache(layer, definition, aClass, name);
+        cache(namespace, definition, aClass, name);
     }
 
-    private void doRegister(String layer, InstanceDefinition instanceDefinition) {
+    private void doRegister(String namespace, InstanceDefinition instanceDefinition) {
         Object definition = instanceDefinition.getDefinition();
         Class aClass = definition.getClass();
         String name = aClass.getName();
-        cache(layer, definition, aClass, name);
+        cache(namespace, definition, aClass, name);
     }
 
-    private void cache(String layer, Object definition, Class aClass, String name) {
+    private void cache(String namespace, Object definition, Class aClass, String name) {
         synchronized (this.classes) {
-            if (getClassCache(layer) == null) {
-                classes.put(layer, new ConcurrentHashMap<>());
-                singletonObjects.put(layer, new ConcurrentHashMap<>());
+            if (getClassCache(namespace) == null) {
+                classes.put(namespace, new ConcurrentHashMap<>());
+                singletonObjects.put(namespace, new ConcurrentHashMap<>());
             }
-            if (!getClassCache(layer).containsKey(name)) {
-                getClassCache(layer).put(name, aClass);
-                getInstantCache(layer).put(name, definition);
+            if (!getClassCache(namespace).containsKey(name)) {
+                getClassCache(namespace).put(name, aClass);
+                getInstantCache(namespace).put(name, definition);
             }
         }
     }

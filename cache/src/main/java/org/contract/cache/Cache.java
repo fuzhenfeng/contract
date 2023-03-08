@@ -5,6 +5,21 @@ package org.contract.cache;
  * @author fuzhenfeng
  */
 public interface Cache {
+
+    /**
+     * 缓存容量
+     * 创建时设定
+     * @return
+     */
+    int capacity();
+
+    /**
+     * 缓存大小
+     * 实际缓存大小，一般小于等于{@link #capacity}缓存容量
+     * @return
+     */
+    int size();
+
     /**
      * 根据key存储value，如果key相同可以覆盖，缓存需要实现淘汰策略，该方法不应该有异常。
      * @param key

@@ -1,5 +1,5 @@
 package org.contract.common;
 
-public enum Layer {
+public enum NameSpace {
     CONTROLLER, SERVICE
 }

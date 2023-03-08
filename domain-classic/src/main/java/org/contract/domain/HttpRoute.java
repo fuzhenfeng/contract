@@ -19,30 +19,27 @@ public class HttpRoute implements Route {
     private Map<String, Map<String, MethodInstant>> layerCacheMap = new ConcurrentHashMap<>();
 
     @Override
-    public void init(Ioc ioc, String layer) {
-        List<Object> instances = ioc.getInstances(layer);
+    public void init(Ioc ioc, String namespace) {
+        List<Object> instances = ioc.getInstances(namespace);
         for (Object obj: instances) {
             Class<?> aClass = obj.getClass();
             Method[] declaredMethods = aClass.getDeclaredMethods();
             for (Method method: declaredMethods) {
-                String[] split = aClass.getName()
-                        .split(StringUtils.SEPARATOR);
-                String name = split[split.length - 1]
-                        .replace("Service", StringUtils.EMPTY);
-                Map<String, MethodInstant> layerCache = layerCacheMap.get(layer);
+                String serviceName = getServiceName(aClass);
+                Map<String, MethodInstant> layerCache = layerCacheMap.get(namespace);
                 if(layerCache == null) {
                     layerCache = new ConcurrentHashMap<>();
-                    layerCacheMap.put(layer, layerCache);
+                    layerCacheMap.put(namespace, layerCache);
                 }
-                layerCache.put(StringUtils.captureName(name) + StringUtils.REALM_SEPARATOR + method.getName(), new MethodInstant(method, obj));
+                layerCache.put(serviceName + StringUtils.REALM_SEPARATOR + method.getName(), new MethodInstant(method, obj));
             }
         }
     }
 
     @Override
-    public HttpResp request(HttpReq httpReq, String layer) {
+    public HttpResp request(HttpReq httpReq, String namespace) {
         try {
-            MethodInstant methodInstant = getMethodInstant(httpReq, layer);
+            MethodInstant methodInstant = getMethodInstant(httpReq, namespace);
             if(methodInstant == null) {
                 log.error(httpReq.getMethod() + " " + httpReq.getRealmName() + " no route found");
                 return new HttpResp(500);
@@ -53,6 +50,12 @@ public class HttpRoute implements Route {
             log.error(e.getMessage(), e);
             return new HttpResp(500);
         }
+    }
+
+    private String getServiceName(Class<?> aClass) {
+        String[] split = aClass.getName().split(StringUtils.SEPARATOR);
+        String name = split[split.length - 1].replace("Service", StringUtils.EMPTY);
+        return StringUtils.captureName(name);
     }
 
     private MethodInstant getMethodInstant(HttpReq httpReq, String layer) {

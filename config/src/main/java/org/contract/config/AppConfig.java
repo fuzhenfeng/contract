@@ -1,5 +1,7 @@
 package org.contract.config;
 
+import org.contract.common.StringUtils;
+
 /**
  * 应用必要配置信息
  * @author fuzhenfeng
@@ -47,6 +49,10 @@ public class AppConfig {
 
     public String getAppRealmName() {
         return appRealmName;
+    }
+
+    public String getAppRealmName2() {
+        return appRealmName.replace(StringUtils.REALM_SEPARATOR, StringUtils.LINUX_SEPARATOR);
     }
 
     public String getAppVersion() {

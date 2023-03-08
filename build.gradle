@@ -3,6 +3,10 @@ allprojects {
     apply plugin: 'maven-publish'
 }
 subprojects {
+    test {
+        reports.html.enabled = false
+        reports.junitXml.enabled = false
+    }
     repositories {
         mavenLocal()
         mavenCentral()
@@ -17,6 +21,10 @@ subprojects {
             mavenLocal()
         }
     }
+}
+task testReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports")
+    reportOn subprojects*.test
 }
 group 'org.contract'
 version '1.0-SNAPSHOT'

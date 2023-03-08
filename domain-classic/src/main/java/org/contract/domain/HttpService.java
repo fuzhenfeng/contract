@@ -3,7 +3,7 @@ package org.contract.domain;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.contract.common.InitException;
-import org.contract.common.Layer;
+import org.contract.common.NameSpace;
 import org.contract.common.StringUtils;
 import org.contract.config.AppConfig;
 import org.contract.config.Environment;
@@ -51,17 +51,17 @@ public class HttpService implements Service {
 
     private void register() throws InitException {
         String path = getPath();
-        ioc.registerByDirectory(Layer.SERVICE.name(), path + StringUtils.LINUX_SEPARATOR + "service");
+        ioc.registerByDirectory(NameSpace.SERVICE.name(), path + StringUtils.LINUX_SEPARATOR + "service");
     }
 
     private void buildRoute() {
         Route route = new HttpRoute();
-        route.init(ioc, Layer.SERVICE.name());
+        route.init(ioc, NameSpace.SERVICE.name());
         this.route = route;
     }
 
     private String getPath() {
         URL resource = environment.getClassLoader().getResource(StringUtils.EMPTY);
-        return resource.getPath() + appConfig.getAppRealmName().replace(StringUtils.REALM_SEPARATOR, StringUtils.LINUX_SEPARATOR);
+        return resource.getPath() + appConfig.getAppRealmName2();
     }
 }
