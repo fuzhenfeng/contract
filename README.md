@@ -57,7 +57,6 @@ com.xxx.service.service.entity
 ## 使用的工具（contract）
 
 ### 标准
-* servlet api(undertow)
 * jpa api(mybatis)
 * jms api(rocketmq)
 * slf4j api(log4j2)
@@ -65,7 +64,7 @@ com.xxx.service.service.entity
 
 ### 非标准
 * ioc api
-* task api(kotlin)
+* task api(kotlin或thread)
 * cache api(guava)
 * security api()
 * test api(junit)

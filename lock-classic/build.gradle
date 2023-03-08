@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+group 'org.contract'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    implementation 'mysql:mysql-connector-java:5.1.49'
+    implementation 'redis.clients:jedis:3.2.0'
+    implementation 'org.redisson:redisson:3.12.3'
+    implementation 'org.apache.zookeeper:zookeeper:3.8.0'
+
+    implementation project(':config')
+    implementation project(':common-classic')
+
+    implementation project(':lock')
+}
+
+test {
+    useJUnitPlatform()
+}

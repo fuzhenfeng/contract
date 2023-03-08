@@ -21,4 +21,8 @@ include 'remote-classic'
 include 'core'
 include 'example'
 include 'server'
+include 'lock'
+include 'lock-classic'
+include 'transaction'
+include 'transaction-classic'
 

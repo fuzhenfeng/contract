@@ -23,10 +23,14 @@ dependencies {
     implementation project(':remote')
     // 任务：提供任务标准
     implementation project(':task')
+    // 事务
+    implementation project(':transaction')
+    // 锁
+    implementation project(':lock')
     // ioc：提供容器化标准
     implementation project(':ioc')
-    // 请求入口：提供入口标准，主要是提供路由。controller名称不一定符合含义，只是遵循惯例命名
 
+    // 请求入口：提供入口标准，主要是提供路由。controller名称不一定符合含义，只是遵循惯例命名
     implementation project(':controller')
     // 领域：提供领域相关标准，主要是事件标准、生命周期标准、状态标准
     implementation project(':domain')
