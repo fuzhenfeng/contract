@@ -46,7 +46,7 @@ package "Application A" as Application_A {
         一般为外网服务，通过http调用
     end note
 
-    package "Application Service(Stateless)" as Application_Service {
+    package "Controller(Stateless)" as Application_Service {
         interface "Controller1" as Controller1
         interface "Controller2" as Controller2
         component [ComponentA(Translate)] as Controller_ComponentA

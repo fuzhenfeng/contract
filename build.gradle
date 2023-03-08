@@ -22,8 +22,13 @@ subprojects {
         }
     }
 }
+task javaDoc(type: Javadoc) {
+    delete("doc/")
+    destinationDir = file("doc/")
+    failOnError false
+}
 task testReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports")
+    destinationDir = file("$rootDir/reports")
     reportOn subprojects*.test
 }
 group 'org.contract'

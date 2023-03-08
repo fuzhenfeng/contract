@@ -10,6 +10,12 @@ contract是对领域驱动开发的一次实践。
 ## contract怎么做？
 contract约定了工程结构和模块指责
 
+### 工程希望实现的能力
+<img src="Ability.png">
+
+### 工程约定的结构和交互
+<img src="Activity.png">
+
 ### 框架（contract）
 ```
 com.xxx.controller
@@ -69,3 +75,9 @@ com.xxx.service.service.entity
 ### 推荐
 * json api(gson)
 * xml api(dom4j)
+
+## doc
+
+
+## test
+![test](https://github.com/fuzhenfeng/contract/reports/index.html)

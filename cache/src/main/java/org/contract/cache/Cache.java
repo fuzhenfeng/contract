@@ -9,7 +9,7 @@ public interface Cache {
     /**
      * 缓存容量
      * 创建时设定
-     * @return
+     * @return 返回
      */
     int capacity();
 

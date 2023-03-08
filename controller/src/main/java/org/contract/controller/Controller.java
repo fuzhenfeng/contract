@@ -12,7 +12,6 @@ import org.contract.ioc.Ioc;
  * 控制器可以和服务分发器进行交互，完成请求，但是这样做使得控制器责任较重，
  * 所以建议实现路由器接口，使得功能更加聚合，方便扩展。
  * @author fuzhenfeng
- * @see    server-serverimpl.puml
  */
 public interface Controller {
     /**
