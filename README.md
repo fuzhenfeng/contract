@@ -80,4 +80,4 @@ com.xxx.service.service.entity
 
 
 ## test
-<iframe src="https://github.com/fuzhenfeng/contract/reports/index.html"></iframe>
+![test](reports/img.png)
