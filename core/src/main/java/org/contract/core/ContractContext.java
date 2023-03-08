@@ -81,11 +81,13 @@ public class ContractContext {
                 ioc.init(config, environment);
                 contractContext.ioc = ioc;
             }
+
             Remote remote = load(Remote.class);
             if(remote != null) {
                 remote.init(config, environment, contractContext.ioc);
                 contractContext.remote = remote;
             }
+
             Controller controller = load(Controller.class);
             if(controller != null) {
                 controller.init(config, environment, contractContext.ioc);
@@ -96,6 +98,7 @@ public class ContractContext {
                 service.init(config, environment, contractContext.ioc);
                 contractContext.service = service;
             }
+
             this.contractContext = contractContext;
             return this;
         }

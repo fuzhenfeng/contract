@@ -16,6 +16,14 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
     implementation 'org.apache.logging.log4j:log4j-api:2.19.0'
 
+    implementation project(':config-classic')
+    implementation project(':cache-classic')
+    implementation project(':remote-classic')
+    implementation project(':task-classic')
+    implementation project(':ioc-classic')
+    implementation project(':controller-classic')
+    implementation project(':domain-classic')
+    implementation project(':repository-classic')
     implementation project(':core')
 }
 

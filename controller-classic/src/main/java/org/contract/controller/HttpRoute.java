@@ -44,7 +44,7 @@ public class HttpRoute implements Route {
         try {
             MethodInstant methodInstant = getMethodInstant(httpReq, layer);
             if(methodInstant == null) {
-                log.error(httpReq.getMethod() + " " + httpReq.getRealmName() + " no route found");
+                log.error("\"" + httpReq.getMethod() + " " + httpReq.getRealmName() + " \" no route found");
                 return new HttpResp(500);
             }
             String body = methodInstant.call(httpReq.getBody());

@@ -16,22 +16,22 @@ dependencies {
     implementation 'com.google.guava:guava:18.0'
 
     // 配置：所有组件依赖配置从中获取
-    implementation project(':config-classic')
+    implementation project(':config')
     // 缓存：提供常用缓存标准
-    implementation project(':cache-classic')
+    implementation project(':cache')
     // 远程调用：提供调用标准
-    implementation project(':remote-classic')
+    implementation project(':remote')
     // 任务：提供任务标准
-    implementation project(':task-classic')
+    implementation project(':task')
     // ioc：提供容器化标准
-    implementation project(':ioc-classic')
+    implementation project(':ioc')
     // 请求入口：提供入口标准，主要是提供路由。controller名称不一定符合含义，只是遵循惯例命名
 
-    api project(':controller-classic')
+    implementation project(':controller')
     // 领域：提供领域相关标准，主要是事件标准、生命周期标准、状态标准
-    api project(':domain-classic')
+    implementation project(':domain')
     // repository：提供orm标准
-    api project(':repository-classic')
+    implementation project(':repository')
     // 工具包：常用字符、集合、时间、计算等等工具
     api project(':common-classic')
 }

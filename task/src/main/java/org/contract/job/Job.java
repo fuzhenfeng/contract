@@ -6,9 +6,11 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 public interface Job {
-    void init(Config config);
+    void start(Config config);
 
-    void commit(Runnable runnable);
+    void stop();
 
-    <T> Future<T> commit(Callable<T> callable);
+    <R> void commit(JobHandle<R> jobHandle);
+
+    <R> R getResult(String id);
 }
