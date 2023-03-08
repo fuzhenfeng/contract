@@ -1,6 +1,6 @@
 package org.contract.cache;
 
 public interface Cache {
-    void init(DataSource dataSource, Listener listener);
-    void get(String key);
+    void put(String key, String value);
+    String get(String key);
 }
