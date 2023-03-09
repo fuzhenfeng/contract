@@ -2,15 +2,15 @@ package org.contract.lock;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.contract.common.InitException;
-import org.contract.common.RunException;
-import org.contract.common.StringUtils;
-import org.contract.config.Config;
 
-import java.sql.*;
-import java.util.Map;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author fuzhenfeng
+ */
 public class MysqlLock2 extends AbsMysqlLock {
     private final static Logger log = LogManager.getLogger(MysqlLock2.class);
 

@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author fuzhenfeng
+ */
 public final class MysqlLock extends AbsMysqlLock {
     private final static Logger log = LogManager.getLogger(MysqlLock.class);
 

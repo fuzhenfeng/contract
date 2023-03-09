@@ -30,6 +30,12 @@ public interface Config {
     Map<String, String> getConfig();
 
     /**
+     * 查询某项的配置。
+     * @return
+     */
+    String getConfigValue(String key);
+
+    /**
      * 查询AppConfig配置
      * AppConfig配置仍然取自于Properties文件，只是进行了对象封装，因为应用必须获取这些信息。
      * @return

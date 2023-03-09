@@ -30,6 +30,11 @@ public class PropertiesConfig implements Config {
     }
 
     @Override
+    public String getConfigValue(String key) {
+        return config.get(key);
+    }
+
+    @Override
     public AppConfig getAppConfig() {
         return appConfig;
     }
