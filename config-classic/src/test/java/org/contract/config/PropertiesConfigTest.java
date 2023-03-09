@@ -1,6 +1,7 @@
 package org.contract.config;
 
 import org.contract.common.InitException;
+import org.contract.common.PropertiesUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,8 @@ class PropertiesConfigTest {
     void setUp() {
         config = new PropertiesConfig();
         try {
-            config.loadConfig(PropertiesConfigTool.getProperties("contract-normal.properties"));
-        } catch (InitException e) {
+            config.loadConfig(PropertiesUtils.getProperties("contract-normal.properties"));
+        } catch (Exception e) {
             assert false;
         }
     }

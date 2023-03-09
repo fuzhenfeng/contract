@@ -12,7 +12,7 @@ public interface Lock {
 
     void close() throws RunException;
 
-    boolean tryLock(long timeout, TimeUnit unit);
+    boolean tryLock(String key, String identity, long timeout, TimeUnit unit);
 
-    boolean tryUnLock(long timeout, TimeUnit unit);
+    boolean tryUnLock(String key, String identity, long timeout, TimeUnit unit);
 }

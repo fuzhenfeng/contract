@@ -1,5 +1,7 @@
 package org.contract.lock;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.contract.common.InitException;
 import org.contract.common.RunException;
 import org.contract.common.StringUtils;
@@ -9,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class LockImpl implements Lock {
+    private final static Logger log = LogManager.getLogger(LockImpl.class);
 
     private DistributedLock distributedLock;
 
@@ -39,12 +42,12 @@ public class LockImpl implements Lock {
     }
 
     @Override
-    public boolean tryLock(long timeout, TimeUnit unit) {
-        return distributedLock.tryLock(timeout, unit);
+    public boolean tryLock(String key, String identity, long timeout, TimeUnit unit) {
+        return distributedLock.tryLock(key, identity, timeout, unit);
     }
 
     @Override
-    public boolean tryUnLock(long timeout, TimeUnit unit) {
-        return distributedLock.tryUnLock(timeout, unit);
+    public boolean tryUnLock(String key, String identity, long timeout, TimeUnit unit) {
+        return distributedLock.tryUnLock(key, identity, timeout, unit);
     }
 }

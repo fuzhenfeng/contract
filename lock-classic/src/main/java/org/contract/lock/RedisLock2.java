@@ -8,17 +8,16 @@ import org.contract.common.StringUtils;
 import org.contract.config.Config;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
-import redis.clients.jedis.Jedis;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class RedisLock implements DistributedLock {
-    private final static Logger log = LogManager.getLogger(RedisLock.class);
+public class RedisLock2 implements DistributedLock {
+    private final static Logger log = LogManager.getLogger(RedisLock2.class);
 
     private String address;
     private Integer port;
-    private Jedis jedis;
+    private RedissonClient redissonClient;
 
     @Override
     public void init(Config config) throws InitException {
@@ -33,11 +32,14 @@ public class RedisLock implements DistributedLock {
             throw new InitException("redis parameter(address port) is a must");
         }
 
-        jedis = new Jedis(this.address, port);
+        org.redisson.config.Config redissonConfig = new org.redisson.config.Config();
+        redissonConfig.useClusterServers().addNodeAddress(this.address);
+        redissonClient = Redisson.create(redissonConfig);
     }
 
     @Override
     public boolean tryLock(String key, String identity, long timeout, TimeUnit unit) {
+        redissonClient.getFairLock("");
         return false;
     }
 
@@ -48,10 +50,6 @@ public class RedisLock implements DistributedLock {
 
     @Override
     public void close() throws RunException {
-        try {
-            jedis.close();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
+
     }
 }

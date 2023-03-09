@@ -1,12 +1,9 @@
 package org.contract.config;
 
-import org.contract.common.InitException;
+import org.contract.common.PropertiesUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.InputStream;
-import java.util.Properties;
 
 class PropertiesConfigLoadConfigTest {
 
@@ -25,8 +22,8 @@ class PropertiesConfigLoadConfigTest {
     @Test
     void loadConfigException() {
         try {
-            config.loadConfig(PropertiesConfigTool.getProperties("contract-exception.properties"));
-        } catch (InitException e) {
+            config.loadConfig(PropertiesUtils.getProperties("contract-exception.properties"));
+        } catch (Exception e) {
             assert true;
         }
     }
@@ -34,8 +31,8 @@ class PropertiesConfigLoadConfigTest {
     @Test
     void loadConfig() {
         try {
-            config.loadConfig(PropertiesConfigTool.getProperties("contract-normal.properties"));
-        } catch (InitException e) {
+            config.loadConfig(PropertiesUtils.getProperties("contract-normal.properties"));
+        } catch (Exception e) {
             assert false;
         }
     }
