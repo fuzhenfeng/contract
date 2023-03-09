@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
 
-class MysqlLockTest extends MysqlLockInitTest {
+class MysqlLock2Test extends MysqlLockInitTest {
 
     @BeforeEach
     void setUp() throws InitException {
         super.setUp();
-        distributedLock = new MysqlLock();
+        distributedLock = new MysqlLock2();
         super.init();
     }
 

@@ -13,7 +13,6 @@ class MysqlLockInitTest extends AbsLockTest {
     void setUp() throws InitException {
         fileName = "mysql.properties";
         super.setUp();
-        distributedLock = new MysqlLock();
     }
 
     @AfterEach
