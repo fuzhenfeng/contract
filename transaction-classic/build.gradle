@@ -17,6 +17,17 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
     implementation 'org.apache.logging.log4j:log4j-api:2.19.0'
 
+    implementation 'mysql:mysql-connector-java:5.1.49'
+
+    implementation 'org.apache.shardingsphere:shardingsphere-jdbc-core:5.0.0-alpha'
+    implementation 'org.apache.shardingsphere:shardingsphere-transaction-xa-core:5.0.0-alpha'
+    implementation 'org.apache.shardingsphere:shardingsphere-transaction-xa-narayana:5.0.0-alpha'
+
+    implementation 'org.jboss.narayana.jta:jta:5.9.9.Final'
+    implementation 'org.jboss.narayana.jts:narayana-jts-integration:5.9.9.Final'
+    implementation 'org.jboss:jboss-transaction-spi:7.6.0.Final'
+    implementation 'org.jboss.logging:jboss-logging:3.4.1.Final'
+
     implementation project(':config')
     implementation project(':common-classic')
 
