@@ -1,10 +1,12 @@
 package org.example.repository;
 
-import java.util.Date;
+import org.example.repository.dao.ExampleDao;
 
 public class ExampleRepository {
 
+    ExampleDao exampleDao;
+
     public String get(String body) {
-        return new Date().toString();
+        return exampleDao.select(Integer.valueOf(body)) + "";
     }
 }
